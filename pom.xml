@@ -135,5 +135,30 @@
         <tag>HEAD</tag>
     </scm>
 
+    <url>https://github.com/Clov614/OpenAI-SDK</url>
+
+    <!--开发者信息-->
+    <developers>
+        <developer>
+            <id>Clov614</id>
+            <name>Clov614</name>
+            <email>clov614@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+
+    <!--开源协议...-->
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
 
 </project>
