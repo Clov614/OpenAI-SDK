@@ -87,10 +87,13 @@ public class AiFactory {
 //
 //            res = exchanger.talk("task 的值 是多少，回答我");
 //            System.out.println(res);
-
+            long startTime = System.currentTimeMillis();
             exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
             Message talk = exchanger.talk("告诉我，你最擅长的事情");
             System.out.println(talk);
+            long endTime = System.currentTimeMillis();
+            long elapsedTime = endTime - startTime;
+            System.out.println("Elapsed Time: " + elapsedTime / 1000 + " seconds");
 
             talk = exchanger.talk("介绍一下你自己");
             System.out.println(talk);
