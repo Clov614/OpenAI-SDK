@@ -126,9 +126,14 @@
             </plugin>
 
         </plugins>
-
     </build>
 
-    <!--todo 引入 scm信息-->
+    <scm>
+        <url>https://github.com/Clov614/OpenAI-SDK</url>
+        <connection>https://github.com/Clov614/OpenAI-SDK.git</connection>
+        <developerConnection>https://github.com/Clov614/OpenAI-SDK</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
 
 </project>
