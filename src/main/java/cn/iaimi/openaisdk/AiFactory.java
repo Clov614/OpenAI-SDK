@@ -5,9 +5,7 @@ import cn.iaimi.openaisdk.aisender.Sender;
 import cn.iaimi.openaisdk.aisender.impl.ExchangerImpl;
 import cn.iaimi.openaisdk.aisender.impl.SenderImpl;
 import cn.iaimi.openaisdk.api.OpenAiApi;
-import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
-import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionResponse;
 import cn.iaimi.openaisdk.model.dto.ai.Message;
 
 import java.util.List;

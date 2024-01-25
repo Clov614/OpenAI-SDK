@@ -7,16 +7,12 @@ import cn.iaimi.openaisdk.aisender.impl.SenderImpl;
 import cn.iaimi.openaisdk.api.OpenAiApi;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import lombok.Data;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
-import java.util.ArrayDeque;
-import java.util.LinkedList;
 
 @Configuration
 @ConfigurationProperties("chat-ai.openai")

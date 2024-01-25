@@ -5,7 +5,6 @@ import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionResponse;
 
 /**
  * 抛异常工具类
- *
  */
 public class ThrowUtils {
 

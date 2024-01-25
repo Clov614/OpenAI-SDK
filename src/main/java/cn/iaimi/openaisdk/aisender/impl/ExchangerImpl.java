@@ -4,7 +4,6 @@ import cn.iaimi.openaisdk.aisender.Exchanger;
 import cn.iaimi.openaisdk.api.OpenAiApi;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
-import cn.iaimi.openaisdk.common.ThrowUtils;
 import cn.iaimi.openaisdk.exception.BusinessException;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionRequest;
