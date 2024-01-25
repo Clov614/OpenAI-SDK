@@ -5,6 +5,7 @@ import cn.iaimi.openaisdk.aisender.Sender;
 import cn.iaimi.openaisdk.aisender.impl.ExchangerImpl;
 import cn.iaimi.openaisdk.aisender.impl.SenderImpl;
 import cn.iaimi.openaisdk.api.OpenAiApi;
+import cn.iaimi.openaisdk.exception.BusinessException;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import cn.iaimi.openaisdk.model.dto.ai.Message;
 
@@ -74,35 +75,39 @@ public class AiFactory {
         Sender sender = aiFactory.createSender();
         Exchanger exchanger = aiFactory.createExchanger();
 
-        Message chat = sender.toChat("你好，这是一条测试消息");
-        System.out.println(chat);
+        try {
+//            Message chat = sender.toChat("你好，这是一条测试消息");
+//            System.out.println(chat);
+//
+//            Message chatPresets = sender.toChatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
+//            System.out.println(chatPresets);
 
-        Message chatPresets = sender.toChatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
-        System.out.println(chatPresets);
+            Message res = exchanger.talk("请你记住 task = 123");
+            System.out.println(res);
 
-        Message res = exchanger.talk("请你记住 task = 123");
-        System.out.println(res);
+            res = exchanger.talk("task 的值 是多少，回答我");
+            System.out.println(res);
 
-        res = exchanger.talk("task 的值 是多少，回答我");
-        System.out.println(res);
+            exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
+            Message talk = exchanger.talk("告诉我，你最擅长的事情");
+            System.out.println(talk);
 
-        exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
-        Message talk = exchanger.talk("告诉我，你最擅长的事情");
-        System.out.println(talk);
+            talk = exchanger.talk("介绍一下你自己");
+            System.out.println(talk);
 
-        talk = exchanger.talk("介绍一下你自己");
-        System.out.println(talk);
+            List<Message> msgs = exchanger.getMsgs();
+            System.out.println("msgs: " + msgs);
 
-        List<Message> msgs = exchanger.getMsgs();
-        System.out.println("msgs: " + msgs);
+            Message lastAnswer = exchanger.getLastAnswer();
+            System.out.println("lastAnswer: " + lastAnswer);
 
-        Message lastAnswer = exchanger.getLastAnswer();
-        System.out.println("lastAnswer: " + lastAnswer);
+            exchanger.clearMsg();
 
-        exchanger.clearMsg();
-
-        Message talk1 = exchanger.talk("你好，介绍一下你自己");
-        System.out.println(talk1);
+            Message talk1 = exchanger.talk("你好，介绍一下你自己");
+            System.out.println(talk1);
+        } catch (BusinessException be) {
+            throw new RuntimeException(be);
+        }
 
     }
 }

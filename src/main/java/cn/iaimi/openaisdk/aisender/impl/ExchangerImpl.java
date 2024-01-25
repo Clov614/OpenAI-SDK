@@ -4,6 +4,7 @@ import cn.iaimi.openaisdk.aisender.Exchanger;
 import cn.iaimi.openaisdk.api.OpenAiApi;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
+import cn.iaimi.openaisdk.common.ThrowUtils;
 import cn.iaimi.openaisdk.exception.BusinessException;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionRequest;
@@ -64,12 +65,12 @@ public class ExchangerImpl implements Exchanger {
         CreateChatCompletionRequest request = new CreateChatCompletionRequest();
         request.setMessages(new ArrayList<>(msgDeque));
         BaseResponse<CreateChatCompletionResponse> response = openAiApi.createChatCompletion(request, configInfo);
-        List<CreateChatCompletionResponse.ChoicesBean> choices = response.getData().getChoices();
         // 错误处理
-        CreateChatCompletionResponse.ErrorBean error = response.getData().getError();
-        if (error != null) {
-            throw new BusinessException(ErrorCode.CHAT_ERROR, error);
+        if (response.getCode() != 0) {
+            throw new BusinessException(ErrorCode.CHAT_ERROR, response.getMessage());
         }
+
+        List<CreateChatCompletionResponse.ChoicesBean> choices = response.getData().getChoices();
 
         Message replyMsg = choices.get(choices.size() - 1).getMessage();
         // 记录对话

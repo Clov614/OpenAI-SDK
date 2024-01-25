@@ -37,13 +37,13 @@ public class SenderImpl implements Sender {
 
         BaseResponse<CreateChatCompletionResponse> chatCompletion =
                 openAiApi.createChatCompletion(request, configInfo);
+        // 错误处理
+        if (chatCompletion.getCode() != 0) {
+            throw new BusinessException(ErrorCode.CHAT_ERROR, chatCompletion.getMessage());
+        }
+
         CreateChatCompletionResponse completionData = chatCompletion.getData();
 
-        // 错误处理
-        CreateChatCompletionResponse.ErrorBean error = completionData.getError();
-        if (error != null) {
-            throw new BusinessException(ErrorCode.CHAT_ERROR, error);
-        }
         return completionData.getChoices().get(0).getMessage();
     }
 
@@ -58,15 +58,12 @@ public class SenderImpl implements Sender {
 
         BaseResponse<CreateChatCompletionResponse> chatCompletion =
                 openAiApi.createChatCompletion(request, configInfo);
-
-        CreateChatCompletionResponse completionData = chatCompletion.getData();
-
         // 错误处理
-        CreateChatCompletionResponse.ErrorBean error = completionData.getError();
-        if (error != null) {
-            throw new BusinessException(ErrorCode.CHAT_ERROR, error);
+        if (chatCompletion.getCode() != 0) {
+            throw new BusinessException(ErrorCode.CHAT_ERROR, chatCompletion.getMessage());
         }
 
+        CreateChatCompletionResponse completionData = chatCompletion.getData();
         return completionData.getChoices().get(0).getMessage();
     }
 }

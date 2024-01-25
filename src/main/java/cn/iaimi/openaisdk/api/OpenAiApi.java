@@ -37,7 +37,10 @@ public class OpenAiApi {
         ThrowUtils.throwIf(proxyPort == null, ErrorCode.PARAMS_ERROR);
 
         CreateChatCompletionResponse response = getResponse(request, url, proxyHost, proxyPort, openAiApiKey);
-
+        // 错误处理 (每分钟速率限制3条)
+        if (response.getError() != null) {
+            return ResultUtils.error(ErrorCode.CHAT_ERROR, response.getError().getCode());
+        }
         return ResultUtils.success(response);
     }
 
