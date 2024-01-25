@@ -76,17 +76,17 @@ public class AiFactory {
         Exchanger exchanger = aiFactory.createExchanger();
 
         try {
-//            Message chat = sender.toChat("你好，这是一条测试消息");
-//            System.out.println(chat);
-//
-//            Message chatPresets = sender.toChatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
-//            System.out.println(chatPresets);
+            Message chat = sender.toChat("你好，这是一条测试消息");
+            System.out.println(chat);
 
-//            Message res = exchanger.talk("请你记住 task = 123");
-//            System.out.println(res);
-//
-//            res = exchanger.talk("task 的值 是多少，回答我");
-//            System.out.println(res);
+            Message chatPresets = sender.toChatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
+            System.out.println(chatPresets);
+
+            Message res = exchanger.talk("请你记住 task = 123");
+            System.out.println(res);
+
+            res = exchanger.talk("task 的值 是多少，回答我");
+            System.out.println(res);
             long startTime = System.currentTimeMillis();
             exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
             Message talk = exchanger.talk("告诉我，你最擅长的事情");
