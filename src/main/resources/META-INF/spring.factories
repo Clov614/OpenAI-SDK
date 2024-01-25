@@ -1,0 +1,2 @@
+# spring boot starter
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.iaimi.clov614.cloverapisdk.CloverApiClientConfig
