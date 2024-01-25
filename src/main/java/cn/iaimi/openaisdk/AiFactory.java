@@ -11,6 +11,10 @@ import cn.iaimi.openaisdk.model.dto.ai.Message;
 
 import java.util.List;
 
+/**
+ * 工厂类
+ * 构建返回 目标类
+ */
 public class AiFactory {
 
     private String openAiApiKey;
@@ -47,11 +51,19 @@ public class AiFactory {
         return this;
     }
 
+    /**
+     * 构建返回Sender
+     * @return 单次提问对象
+     */
     public Sender createSender() {
         ConfigInfo configInfo = createConfigInfo();
         return new SenderImpl(configInfo, openAiApi);
     }
 
+    /**
+     * 构建返回 Exchanger
+     * @return 连续对话对象
+     */
     public Exchanger createExchanger() {
         ConfigInfo configInfo = createConfigInfo();
         return new ExchangerImpl(msgMaxSize, configInfo, openAiApi);

@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 
 @Configuration
-@ConfigurationProperties("chat-ai.openai")
+@ConfigurationProperties("chatai.open-ai")
 @Data
 @ComponentScan
 public class OpenAiSdkConfig {

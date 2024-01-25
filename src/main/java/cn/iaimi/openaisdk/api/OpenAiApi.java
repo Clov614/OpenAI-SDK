@@ -9,13 +9,12 @@ import cn.iaimi.openaisdk.common.ThrowUtils;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionRequest;
 import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionResponse;
-import cn.iaimi.openaisdk.model.dto.ai.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 /**
+ * openAi 核心请求类
+ *
  * @author Clov614
  * @version 1.0
  * DATE 2023/11/13
@@ -63,28 +62,4 @@ public class OpenAiApi {
         return JSONUtil.toBean(result, CreateChatCompletionResponse.class);
     }
 
-
-    public static void main(String[] args) {
-
-        String url = "https://api.openai.com/v1/chat/completions";
-        String proxyHost = "127.0.0.1";
-        Integer proxyPort = 7890;
-        String model = "gpt-3.5-turbo";
-
-        OpenAiApi openAiApi = new OpenAiApi();
-        String openAiKey = "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";
-        CreateChatCompletionRequest request = new CreateChatCompletionRequest();
-        request.setMessages(Arrays.asList(new Message("user", "你好 这是一条测试消息")));
-
-        ConfigInfo configInfo = new ConfigInfo();
-        configInfo.setOpenAiApiKey(openAiKey);
-        configInfo.setUrl(url);
-        configInfo.setProxyHost(proxyHost);
-        configInfo.setProxyPort(proxyPort);
-        configInfo.setAiModel(model);
-
-        BaseResponse<CreateChatCompletionResponse> response = openAiApi.createChatCompletion(request, configInfo);
-        System.out.println(response.getData().getChoices());
-        System.out.println(response.getData().toString());
-    }
 }
