@@ -82,11 +82,11 @@ public class AiFactory {
 //            Message chatPresets = sender.toChatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
 //            System.out.println(chatPresets);
 
-            Message res = exchanger.talk("请你记住 task = 123");
-            System.out.println(res);
-
-            res = exchanger.talk("task 的值 是多少，回答我");
-            System.out.println(res);
+//            Message res = exchanger.talk("请你记住 task = 123");
+//            System.out.println(res);
+//
+//            res = exchanger.talk("task 的值 是多少，回答我");
+//            System.out.println(res);
 
             exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
             Message talk = exchanger.talk("告诉我，你最擅长的事情");
@@ -105,6 +105,11 @@ public class AiFactory {
 
             Message talk1 = exchanger.talk("你好，介绍一下你自己");
             System.out.println(talk1);
+
+            List<Message> msgs1 = exchanger.getMsgs();
+            System.out.println(msgs1);
+            System.out.println(msgs1.size());
+            exchanger.clearPreSet();
         } catch (BusinessException be) {
             throw new RuntimeException(be);
         }
