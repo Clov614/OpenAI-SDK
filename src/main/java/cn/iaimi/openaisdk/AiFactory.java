@@ -75,14 +75,14 @@ public class AiFactory {
 
     /* 测试类 */
     public static void main(String[] args) {
-        String openAiApiKey = "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";
+        String openAiApiKey = "sk-xxxxxxxx"; // 你的 secretKey
         OpenAiApi openAiApi = new OpenAiApi();
 
         AiFactory aiFactory = new AiFactory(openAiApiKey, openAiApi)
                 .withUrl("https://api.openai.com/v1/chat/completions")
-                .withProxy("127.0.0.1", 7890)
-                .withModel("gpt-3.5-turbo")
-                .withMsgMaxSize(30);
+                .withProxy("127.0.0.1", 7890) // 代理地址
+                .withModel("gpt-3.5-turbo")                     // 模型类型设置
+                .withMsgMaxSize(30);                            // 最大历史消息数
 
         Sender sender = aiFactory.createSender();
         Exchanger exchanger = aiFactory.createExchanger();
