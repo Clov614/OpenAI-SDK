@@ -1,11 +1,17 @@
 # OpenAI-SDK
 
-封装了常用的对 ChatGPT 的 API 的调用
+OpenAI-SDK 封装了对 ChatGPT 和阿里巴巴通义千问 API 的常用调用。
 
 ## 目录
 - [快速开始](#快速开始)
-    - [第一种使用方式： 工厂模式](#第一种使用方式)
-    - [第二种使用方式： SpringBoot-Starter](#第二种使用方式)
+  - [第一种使用方式： 工厂模式](#第一种使用方式)
+    - [ChatGPT调用示例](#chatgpt调用示例)
+    - [通义千问调用示例](#通义千问调用示例)
+  - [第二种使用方式： SpringBoot-Starter](#第二种使用方式)
+    - [ChatGPT配置&&调用示例](#chatgpt配置调用示例)
+    - [通义千问配置&&调用示例](#通义千问配置调用示例)
+      - [ChatGPT测试类](#chatgpt测试类)
+      - [通义千问测试类](#通义千问测试类)
 
 
 ## 快速开始
@@ -14,7 +20,10 @@
 
 通过工厂模式构建出请求实例进行请求
 
-```java
+<details>
+  <summary>ChatGPT调用示例</summary>
+
+  ```java
 /* 测试类 */
 public static void main(String[] args) {
     String openAiApiKey = "sk-xxxxxxxx"; // 你的 secretKey
@@ -77,6 +86,12 @@ public static void main(String[] args) {
 
 }
 ```
+</details>
+
+<details>
+  <summary>通义千问调用示例</summary>
+
+</details>
 
 ### 第二种使用方式
 
@@ -87,9 +102,14 @@ public static void main(String[] args) {
 <dependency>
     <groupId>cn.iaimi</groupId>
     <artifactId>OpenAI-SDK</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
+
+#### ChatGPT配置&&调用示例
+
+<details>
+  <summary>ChatGPT配置&&调用示例</summary>
 
 `application.yml` 中配置如下条目
 ```yaml
@@ -113,9 +133,47 @@ private Sender sender;
 private Exchanger exchanger;
 ```
 
+</details>
+
+#### 通义千问配置&&调用示例
+
+<details>
+  <summary>通义千问配置&&调用示例</summary>
+
+`application.yml` 中配置如下条目
+```yaml
+chatai:
+  alibaba:
+    access-key-id: LTxxxxxxxxxxxTRDx
+    access-key-secret: YLxxxxxxxxxxvuj1
+    # agentKey 模型应用中获取
+    agent-key: 0becffd1xxxxxxxp_efm
+    # appID 模型应用中获取
+    app-id: 385exxxxxxxx323f192
+    # 最大历史消息数 (可选)
+    msg-max-size: 30
+```
+
+通过依赖注入即可使用
+```java
+@Resource
+private ChatClient chatClient;
+
+@Resource
+private ChatRecordClient chatRecordClient;
+```
+
+</details>
+
+
+
+
 #### 测试类示例如下
 
+##### ChatGPT测试类
 
+<details>
+  <summary>ChatGPT测试类</summary>
 
 ```java
 /**
@@ -123,62 +181,107 @@ private Exchanger exchanger;
  * {@code @date} 2024/1/25 16:28
  */
 @SpringBootTest
-@ActiveProfiles({"work"})
 public class OpenAITest {
 
-    @Resource
-    private Sender sender;
+  @Resource
+  private Sender sender;
 
-    @Resource
-    private Exchanger exchanger;
+  @Resource
+  private Exchanger exchanger;
 
-    /*单次对话测试*/
-    @Test
-    void talkSingleTest() {
-        Message chat = sender.toChat("你好，这是一条测试消息");
-        System.out.println(chat);
+  /*单次对话测试*/
+  @Test
+  void talkSingleTest() {
+    Message chat = sender.chat("你好，这是一条测试消息");
+    System.out.println(chat);
 
-        Message chatPresets = sender.toChatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
-        System.out.println(chatPresets);
-    }
+    Message chatPresets = sender.chatPresets("你好，请告诉我你是谁", "你的名字叫小智，是一名无所不知的智者");
+    System.out.println(chatPresets);
+  }
 
-    /*连续对话测试*/
-    @Test
-    void talkContinueTest() {
-        Message res = exchanger.talk("请你记住 task = 123");
-        System.out.println(res);
+  /*连续对话测试*/
+  @Test
+  void talkContinueTest() {
+    Message res = exchanger.chat("请你记住 task = 123");
+    System.out.println(res);
 
-        res = exchanger.talk("task 的值 是多少，回答我");
-        System.out.println(res);
-        long startTime = System.currentTimeMillis();
-        exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
-        Message talk = exchanger.talk("告诉我，你最擅长的事情");
-        System.out.println(talk);
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-        System.out.println("Elapsed Time: " + elapsedTime / 1000 + " seconds");
+    res = exchanger.chat("task 的值 是多少，回答我");
+    System.out.println(res);
+    long startTime = System.currentTimeMillis();
+    exchanger.setPreSetMsg("你现在是一位绘图专家，你最擅长的事情就是绘画");
+    Message talk = exchanger.chat("告诉我，你最擅长的事情");
+    System.out.println(talk);
+    long endTime = System.currentTimeMillis();
+    long elapsedTime = endTime - startTime;
+    System.out.println("Elapsed Time: " + elapsedTime / 1000 + " seconds");
 
-        talk = exchanger.talk("介绍一下你自己");
-        System.out.println(talk);
+    talk = exchanger.chat("介绍一下你自己");
+    System.out.println(talk);
 
-        List<Message> msgs = exchanger.getMsgs();
-        System.out.println("msgs: " + msgs);
+    List<Message> msgs = exchanger.getMsgs();
+    System.out.println("msgs: " + msgs);
 
-        Message lastAnswer = exchanger.getLastAnswer();
-        System.out.println("lastAnswer: " + lastAnswer);
+    Message lastAnswer = exchanger.getLastAnswer();
+    System.out.println("lastAnswer: " + lastAnswer);
 
-        exchanger.clearMsg();
+    exchanger.clearMsg();
 
-        Message talk1 = exchanger.talk("你好，介绍一下你自己");
-        System.out.println(talk1);
+    Message talk1 = exchanger.chat("你好，介绍一下你自己");
+    System.out.println(talk1);
 
-        List<Message> msgs1 = exchanger.getMsgs();
-        System.out.println(msgs1);
-        System.out.println(msgs1.size());
-        exchanger.clearPreSet();
-    }
+    List<Message> msgs1 = exchanger.getMsgs();
+    System.out.println(msgs1);
+    System.out.println(msgs1.size());
+    exchanger.clearPreSet();
+  }
 
 }
 ```
+
+</details>
+
+##### 通义千问测试类
+<details>
+  <summary>通义千问测试类</summary>
+  
+```java
+/**
+ * @author clov614
+ * {@code @date} 2024/1/26 18:46
+ */
+@SpringBootTest
+public class AliAITest {
+
+    @Resource
+    private ChatClient chatClient;
+
+    @Resource
+    private ChatRecordClient chatRecordClient;
+
+    @Test
+    void singleTest() {
+        ChatClient client = chatClient.createClient(false);
+        String answer = client.chat("你好，告诉我你的角色");
+        System.out.println(answer);
+    }
+
+    @Test
+    void complexTest() {
+        ChatRecordClient client = chatRecordClient.createClient(true);
+        String a1 = client.chat("你好我叫亨利");
+        System.out.println(a1);
+        String a2 = client.chat("还记得我是谁吗");
+        System.out.println(a2);
+        List<CompletionsRequest.ChatQaPair> msgs = client.getMsgs();
+        System.out.println(msgs);
+        CompletionsRequest.ChatQaPair lastAnswer = client.getLastAnswer();
+        System.out.println("lastAnswer: " + lastAnswer);
+    }
+}
+```
+
+</details>
+
+
 
 
