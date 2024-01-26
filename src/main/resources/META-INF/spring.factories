@@ -1,2 +1,2 @@
 # spring boot starter
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.iaimi.openaisdk.OpenAiSdkConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.iaimi.openaisdk.OpenAiSdkConfig,cn.iaimi.openaisdk.AliChatAiSdkConfig
