@@ -1,4 +1,4 @@
-package cn.iaimi.openaisdk.aisender;
+package cn.iaimi.openaisdk.aisender.openai;
 
 import cn.iaimi.openaisdk.model.dto.ai.Message;
 
@@ -16,7 +16,7 @@ public interface Exchanger {
      * @param message 发送给 AI 的消息
      * @return
      */
-    Message talk(String message);
+    Message chat(String message);
 
     /**
      * 获取所有对话历史

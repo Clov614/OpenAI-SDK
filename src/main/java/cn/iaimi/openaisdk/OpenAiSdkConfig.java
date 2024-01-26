@@ -1,9 +1,9 @@
 package cn.iaimi.openaisdk;
 
-import cn.iaimi.openaisdk.aisender.Exchanger;
-import cn.iaimi.openaisdk.aisender.Sender;
-import cn.iaimi.openaisdk.aisender.impl.ExchangerImpl;
-import cn.iaimi.openaisdk.aisender.impl.SenderImpl;
+import cn.iaimi.openaisdk.aisender.openai.Exchanger;
+import cn.iaimi.openaisdk.aisender.openai.Sender;
+import cn.iaimi.openaisdk.aisender.openai.impl.ExchangerImpl;
+import cn.iaimi.openaisdk.aisender.openai.impl.SenderImpl;
 import cn.iaimi.openaisdk.api.OpenAiApi;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import lombok.Data;

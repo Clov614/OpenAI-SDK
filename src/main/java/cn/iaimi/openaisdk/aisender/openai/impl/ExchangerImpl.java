@@ -1,10 +1,9 @@
-package cn.iaimi.openaisdk.aisender.impl;
+package cn.iaimi.openaisdk.aisender.openai.impl;
 
-import cn.iaimi.openaisdk.aisender.Exchanger;
+import cn.iaimi.openaisdk.aisender.openai.Exchanger;
 import cn.iaimi.openaisdk.api.OpenAiApi;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
-import cn.iaimi.openaisdk.common.ThrowUtils;
 import cn.iaimi.openaisdk.exception.BusinessException;
 import cn.iaimi.openaisdk.model.dto.ai.ConfigInfo;
 import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionRequest;
@@ -55,7 +54,7 @@ public class ExchangerImpl implements Exchanger {
     }
 
     @Override
-    public Message talk(String message) {
+    public Message chat(String message) {
 
         if (preSetMsg != null) { // 假如存在预设消息，拼入消息开头
             msgDeque.addFirst(preSetMsg);

@@ -1,6 +1,6 @@
-package cn.iaimi.openaisdk.aisender.impl;
+package cn.iaimi.openaisdk.aisender.openai.impl;
 
-import cn.iaimi.openaisdk.aisender.Sender;
+import cn.iaimi.openaisdk.aisender.openai.Sender;
 import cn.iaimi.openaisdk.api.OpenAiApi;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
@@ -31,7 +31,7 @@ public class SenderImpl implements Sender {
     private OpenAiApi openAiApi;
 
     @Override
-    public Message toChat(String message) {
+    public Message chat(String message) {
         CreateChatCompletionRequest request = new CreateChatCompletionRequest();
         request.setMessages(Arrays.asList(new Message("user", message)));
 
@@ -48,7 +48,7 @@ public class SenderImpl implements Sender {
     }
 
     @Override
-    public Message toChatPresets(String message, String systemSets) {
+    public Message chatPresets(String message, String systemSets) {
         List<Message> messageList = new ArrayList<>();
         messageList.add(new Message("system", systemSets));
         messageList.add(new Message("user", message));

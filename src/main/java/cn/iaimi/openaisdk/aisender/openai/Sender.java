@@ -1,4 +1,4 @@
-package cn.iaimi.openaisdk.aisender;
+package cn.iaimi.openaisdk.aisender.openai;
 
 import cn.iaimi.openaisdk.model.dto.ai.Message;
 
@@ -17,7 +17,7 @@ public interface Sender {
      * @param message 用户消息
      * @return Message 消息对象
      */
-    Message toChat(String message);
+    Message chat(String message);
 
     /**
      * 单词对话  携带 系统预设消息
@@ -26,5 +26,5 @@ public interface Sender {
      * @param systemSets 系统预设 prompt
      * @return Message 消息对象
      */
-    Message toChatPresets(String message, String systemSets);
+    Message chatPresets(String message, String systemSets);
 }
