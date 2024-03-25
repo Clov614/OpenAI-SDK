@@ -1,7 +1,6 @@
 package cn.iaimi.openaisdk.aisender.alibaba;
 
-import cn.iaimi.openaisdk.model.dto.ai.Message;
-import com.aliyun.broadscope.bailian.sdk.models.CompletionsRequest;
+import com.alibaba.dashscope.common.Message;
 
 import java.util.List;
 
@@ -15,27 +14,35 @@ public interface ChatRecordClient extends ChatClient {
 
     /**
      * 获取所有对话历史
+     *
      * @return messageList
      */
-    List<CompletionsRequest.ChatQaPair> getMsgs();
+    List<Message> getMsgs();
 
     /**
      * 获取最后一条回复
+     *
      * @return
      */
-    CompletionsRequest.ChatQaPair getLastAnswer();
+    Message getLast();
+
+    /**
+     * 获取最开头的一条消息
+     * @return
+     */
+    Message getTopMsg();
 
     /**
      * 从后往前删除 多条消息
      * @param itemNums 删除的数量
-     * @return 是否删除成功
+     * @return boolean 是否删除成功
      */
     boolean removeLastMsgs(int itemNums);
 
     /**
      * 从前往后删除 多条消息
      * @param itemNums 删除的数量
-     * @return 是否删除成功
+     * @return boolean 是否删除成功
      */
     boolean removeFirstMsgs(int itemNums);
 

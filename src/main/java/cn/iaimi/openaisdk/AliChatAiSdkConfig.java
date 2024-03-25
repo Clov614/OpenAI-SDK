@@ -4,7 +4,6 @@ import cn.iaimi.openaisdk.aisender.alibaba.ChatClient;
 import cn.iaimi.openaisdk.aisender.alibaba.ChatRecordClient;
 import cn.iaimi.openaisdk.aisender.alibaba.impl.ChatClientContinuousImpl;
 import cn.iaimi.openaisdk.aisender.alibaba.impl.ChatClientImpl;
-import com.aliyun.broadscope.bailian.sdk.AccessTokenClient;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,38 +17,20 @@ import org.springframework.context.annotation.Configuration;
 public class AliChatAiSdkConfig {
 
     /**
-     * AK (必填)
+     * 百炼开放平台 apiKey
      */
-    private String accessKeyId;
+    private String apiKey;
 
     /**
-     * SK (必填)
+     * 使用的模型
      */
-    private String accessKeySecret;
-
-
-    /**
-     * agentKey (必填) 模型应用中获取
-     */
-    private String agentKey;
-
-    /**
-     * appID (必填) 模型应用中获取
-     */
-    private String appId;
+    private String useModel;
 
     /**
      * 历史消息最大保存条数 (选填)
      */
-    private int msgMaxSize = 20;
+    private int msgMaxSize = 10;
 
-    private AccessTokenClient accessTokenClient;
-
-
-    @Bean
-    public AccessTokenClient accessTokenClient() {
-        return new AccessTokenClient(accessKeyId, accessKeySecret, agentKey);
-    }
 
     @Bean
     public ChatClient chatClient() {

@@ -13,6 +13,7 @@ public enum ErrorCode {
     FORBIDDEN_ERROR(40300, "禁止访问"),
     SYSTEM_ERROR(50000, "系统内部异常"),
     CHAT_ERROR(50001, "调用AI接口失败"),
+    NO_API_KEY(50002, "无效API—KEY"),
     OPERATION_ERROR(50001, "操作失败");
 
     /**

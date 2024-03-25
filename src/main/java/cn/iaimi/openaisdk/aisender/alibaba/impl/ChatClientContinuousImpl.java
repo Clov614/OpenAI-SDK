@@ -1,17 +1,9 @@
 package cn.iaimi.openaisdk.aisender.alibaba.impl;
 
-import cn.iaimi.openaisdk.aisender.alibaba.ChatClient;
 import cn.iaimi.openaisdk.aisender.alibaba.ChatRecordClient;
-import cn.iaimi.openaisdk.common.ErrorCode;
-import cn.iaimi.openaisdk.exception.BusinessException;
-import com.aliyun.broadscope.bailian.sdk.ApplicationClient;
-import com.aliyun.broadscope.bailian.sdk.models.CompletionsRequest;
-import com.aliyun.broadscope.bailian.sdk.models.CompletionsResponse;
+import com.alibaba.dashscope.common.Message;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 /**
@@ -27,64 +19,43 @@ public class ChatClientContinuousImpl extends ChatClientImpl implements ChatReco
     }
 
     @Override
-    public String chat(String message) {
-        request = request.setPrompt(message).setHistory(new ArrayList<>()); // 设置历史消息
-        CompletionsResponse response = client.completions(request);
-        if (!response.isSuccess()) {
-            String error = "completions Error requestId: " + response.getRequestId() + " code: " + response.getCode()
-                    + " msg: " + response.getMessage();
-            throw new BusinessException(ErrorCode.CHAT_ERROR, error);
-        }
-        String botAnswer = response.getData().getText();
-        history.addLast(new CompletionsRequest.ChatQaPair(message, botAnswer)); // 添加历史消息
-        // 维护大小
-        while (history.size() > maxMsgSize) {
-            history.removeFirst();
-        }
-
-        return botAnswer;
+    public Message chat(String message) {
+        return doChat(message, null, true);
     }
 
     @Override
-    public List<CompletionsRequest.ChatQaPair> getMsgs() {
-        return new ArrayList<>(history);
+    public List<Message> getMsgs() {
+        return msgManager.get();
     }
 
     @Override
-    public CompletionsRequest.ChatQaPair getLastAnswer() {
-        return history.getLast();
+    public Message getLast() {
+        return msgManager.getLast();
     }
 
     @Override
+    public Message getTopMsg() {
+        return msgManager.getTop();
+    }
+
+    @Override
+    @Deprecated
     public boolean removeLastMsgs(int itemNums) {
-        boolean flag = true;
-
-        while (itemNums-- > 0) {
-            if (history.isEmpty()) {
-                flag = false;
-                break;
-            }
-            history.removeLast();
-        }
+        boolean flag = false;
+        // todo 尚未实现
         return flag;
     }
 
     @Override
+    @Deprecated
     public boolean removeFirstMsgs(int itemNums) {
-        boolean flag = true;
-
-        while (itemNums-- > 0) {
-            if (history.isEmpty()) {
-                flag = false;
-                break;
-            }
-            history.removeFirst();
-        }
+        boolean flag = false;
+        // todo 待实现
         return flag;
     }
 
     @Override
     public void clearMsg() {
-        history.clear();
+        msgManager.clearMsg();
     }
 }
