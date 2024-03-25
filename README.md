@@ -98,7 +98,7 @@ public static void main(String[] args) {
 <dependency>
     <groupId>cn.iaimi</groupId>
     <artifactId>OpenAI-SDK</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 </dependency>
 ```
 
@@ -139,15 +139,13 @@ private Exchanger exchanger;
 `application.yml` 中配置如下条目
 ```yaml
 chatai:
+  open-ai:
   alibaba:
-    access-key-id: LTxxxxxxxxxxxTRDx
-    access-key-secret: YLxxxxxxxxxxvuj1
-    # agentKey 模型应用中获取
-    agent-key: 0becffd1xxxxxxxp_efm
-    # appID 模型应用中获取
-    app-id: 385exxxxxxxx323f192
     # 最大历史消息数 (可选)
-    msg-max-size: 30
+    msg-max-size: 20
+    # 百炼平台中获取
+    api-key: sk-xxxxxxxx
+    use-model: qwen-max
 ```
 
 通过依赖注入即可使用
