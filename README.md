@@ -246,31 +246,36 @@ public class OpenAITest {
 @SpringBootTest
 public class AliAITest {
 
-    @Resource
-    private ChatClient chatClient;
+  @Resource
+  private ChatClient chatClient;
 
-    @Resource
-    private ChatRecordClient chatRecordClient;
+  @Resource
+  private ChatRecordClient chatRecordClient;
 
-    @Test
-    void singleTest() {
-        ChatClient client = chatClient.createClient(false);
-        String answer = client.chat("你好，告诉我你的角色");
-        System.out.println(answer);
-    }
+  @Test
+  public void test01() {
+    // 单次对话
+    ChatClient client = chatClient.createClient(false);
+    Message msg = client.chat("你好");
+    String content = msg.getContent();
+    System.out.println(content);
 
-    @Test
-    void complexTest() {
-        ChatRecordClient client = chatRecordClient.createClient(true);
-        String a1 = client.chat("你好我叫亨利");
-        System.out.println(a1);
-        String a2 = client.chat("还记得我是谁吗");
-        System.out.println(a2);
-        List<CompletionsRequest.ChatQaPair> msgs = client.getMsgs();
-        System.out.println(msgs);
-        CompletionsRequest.ChatQaPair lastAnswer = client.getLastAnswer();
-        System.out.println("lastAnswer: " + lastAnswer);
-    }
+    // 连续对话
+    ChatRecordClient client1 = chatRecordClient.createClient(true);
+    client1.setPresets("你是一个编程问题小帮手，你的名字叫小艺");
+    Message res = client1.chat("你好，请问该怎么称呼你");
+    System.out.println(res);
+    Message res2 = client1.chat("问一个问题，Java中Queue有哪些常用方法");
+    System.out.println(res2);
+    List<Message> msgs = client1.getMsgs();
+    System.out.println(msgs);
+    Message freshMsg = client1.getLast();
+    System.out.println(freshMsg);
+    Message res3 = client1.chat("刚刚我的问题是啥来着");
+    System.out.println(res3);
+    client1.clearMsg();
+    System.out.println(client1.getMsgs());
+  }
 }
 ```
 
