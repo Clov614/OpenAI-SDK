@@ -7,6 +7,7 @@ import cn.iaimi.openaisdk.exception.BusinessException;
 import cn.iaimi.openaisdk.manager.MsgManager;
 import cn.iaimi.openaisdk.model.enums.ModelType;
 import com.alibaba.dashscope.aigc.generation.Generation;
+import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
 import com.alibaba.dashscope.aigc.generation.models.QwenParam;
 import com.alibaba.dashscope.common.Message;
@@ -14,8 +15,6 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.Constants;
-import com.aliyun.broadscope.bailian.sdk.AccessTokenClient;
-import com.google.common.collect.EvictingQueue;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.Resource;
@@ -65,6 +64,15 @@ public class ChatClientImpl implements ChatClient {
         return this;
     }
 
+    @Override
+    public void add(String userMsg) {
+        if (null != userMsg) {
+            Message msg =
+                    Message.builder().role(Role.USER.getValue()).content(userMsg).build();
+            msgManager.add(msg);
+        }
+    }
+
 
     @Override
     public ChatClient createClient(boolean isHistory) {
@@ -91,9 +99,6 @@ public class ChatClientImpl implements ChatClient {
     }
 
     public Message doChat(String message, String systemSets, boolean isHistory) {
-        if (!isHistory) { // 不保存历史消息 // TODO 单次询问借助队列特性，改为弹出
-            msgManager.clearMsg();
-        }
         if (null != systemSets) {
             Message systemMsg =
                     Message.builder().role(Role.SYSTEM.getValue()).content(systemSets).build();
@@ -106,8 +111,9 @@ public class ChatClientImpl implements ChatClient {
         QwenParam param = QwenParam.builder()
                 .model(modelMap.getOrDefault(aliChatAiSdkConfig.getUseModel(), ModelType.QWEN_MAX).getValue())
                 .messages(msgManager.get())
-                .topP(0.8)
-                .enableSearch(true) // 是否启用搜索？
+                .resultFormat(GenerationParam.ResultFormat.MESSAGE)
+                .topP(aliChatAiSdkConfig.getTopP()) // 取值越大，生成的随机性越高(0, 1.0)
+                .enableSearch(aliChatAiSdkConfig.getEnableSearch()) // 是否启用搜索？
                 .build();
         try {
             GenerationResult result = gen.call(param);
@@ -117,6 +123,10 @@ public class ChatClientImpl implements ChatClient {
             throw new BusinessException(ErrorCode.NO_API_KEY, e.getMessage());
         } catch (InputRequiredException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (!isHistory) { // 不保存历史消息 // TODO 单次询问借助队列特性，改为弹出
+                msgManager.clearMsg();
+            }
         }
     }
 }

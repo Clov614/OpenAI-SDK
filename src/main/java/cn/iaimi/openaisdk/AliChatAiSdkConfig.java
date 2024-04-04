@@ -26,6 +26,10 @@ public class AliChatAiSdkConfig {
      */
     private String useModel;
 
+    private Double topP = 0.85;
+
+    private Boolean enableSearch = false;
+
     /**
      * 历史消息最大保存条数 (选填)
      */

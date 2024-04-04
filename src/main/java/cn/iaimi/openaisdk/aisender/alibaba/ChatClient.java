@@ -12,6 +12,8 @@ public interface ChatClient {
 
     ChatClient setPresets(String systemMsg);
 
+    void add(String userMsg);
+
     Message chat(String message);
 
     /**
