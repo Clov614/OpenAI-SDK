@@ -98,7 +98,7 @@ public static void main(String[] args) {
 <dependency>
     <groupId>cn.iaimi</groupId>
     <artifactId>OpenAI-SDK</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.5</version>
 </dependency>
 ```
 
