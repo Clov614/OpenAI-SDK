@@ -2,6 +2,7 @@ package cn.iaimi.openaisdk.api;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
+import cn.iaimi.openaisdk.OpenAiSdkConfig;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
 import cn.iaimi.openaisdk.common.ResultUtils;
@@ -33,7 +34,8 @@ public class OpenAiApi {
         request.setModel(model);
 
         ThrowUtils.throwIf(StringUtils.isAnyBlank(openAiApiKey, url), ErrorCode.PARAMS_ERROR);
-        ThrowUtils.throwIf(proxyPort == null, ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf((OpenAiSdkConfig.DEFALUT_URL.equals(url) &&
+                (proxyPort == null || proxyHost == null)), ErrorCode.PARAMS_ERROR);
 
         CreateChatCompletionResponse response = getResponse(request, url, proxyHost, proxyPort, openAiApiKey);
         // 错误处理 (每分钟速率限制3条)

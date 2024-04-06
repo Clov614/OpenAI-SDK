@@ -20,6 +20,8 @@ import javax.annotation.Resource;
 @ComponentScan
 public class OpenAiSdkConfig {
 
+    public final static String DEFALUT_URL = "https://api.openai.com/v1/chat/completions";
+
     /**
      * secretKey (必填)
      */
@@ -29,7 +31,7 @@ public class OpenAiSdkConfig {
      * 接口地址
      * 默认= https://api.openai.com/v1/chat/completions
      */
-    private String url = "https://api.openai.com/v1/chat/completions";
+    private String url = DEFALUT_URL;
 
     // region 代理配置
 
