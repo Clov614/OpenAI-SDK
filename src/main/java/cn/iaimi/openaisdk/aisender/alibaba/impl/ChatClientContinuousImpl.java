@@ -1,6 +1,8 @@
 package cn.iaimi.openaisdk.aisender.alibaba.impl;
 
 import cn.iaimi.openaisdk.aisender.alibaba.ChatRecordClient;
+import cn.iaimi.openaisdk.common.BaseResData;
+import com.alibaba.dashscope.aigc.generation.GenerationUsage;
 import com.alibaba.dashscope.common.Message;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +21,7 @@ public class ChatClientContinuousImpl extends ChatClientImpl implements ChatReco
     }
 
     @Override
-    public Message chat(String message) {
+    public BaseResData<Message, GenerationUsage> chat(String message) {
         return doChat(message, null, true);
     }
 

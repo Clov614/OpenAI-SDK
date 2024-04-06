@@ -1,5 +1,7 @@
 package cn.iaimi.openaisdk.aisender.openai;
 
+import cn.iaimi.openaisdk.common.BaseResData;
+import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionResponse;
 import cn.iaimi.openaisdk.model.dto.ai.Message;
 
 import java.util.List;
@@ -13,10 +15,11 @@ public interface Exchanger {
 
     /**
      * 发送对话
+     *
      * @param message 发送给 AI 的消息
      * @return
      */
-    Message chat(String message);
+    BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat(String message);
 
     /**
      * 获取所有对话历史

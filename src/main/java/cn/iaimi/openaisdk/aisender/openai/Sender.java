@@ -1,5 +1,7 @@
 package cn.iaimi.openaisdk.aisender.openai;
 
+import cn.iaimi.openaisdk.common.BaseResData;
+import cn.iaimi.openaisdk.model.dto.ai.CreateChatCompletionResponse;
 import cn.iaimi.openaisdk.model.dto.ai.Message;
 
 /**
@@ -17,7 +19,7 @@ public interface Sender {
      * @param message 用户消息
      * @return Message 消息对象
      */
-    Message chat(String message);
+    BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat(String message);
 
     /**
      * 单词对话  携带 系统预设消息
@@ -26,5 +28,5 @@ public interface Sender {
      * @param systemSets 系统预设 prompt
      * @return Message 消息对象
      */
-    Message chatPresets(String message, String systemSets);
+    BaseResData<Message, CreateChatCompletionResponse.UsageBean> chatPresets(String message, String systemSets);
 }

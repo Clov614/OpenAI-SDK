@@ -2,6 +2,7 @@ package cn.iaimi.openaisdk.aisender.alibaba.impl;
 
 import cn.iaimi.openaisdk.AliChatAiSdkConfig;
 import cn.iaimi.openaisdk.aisender.alibaba.ChatClient;
+import cn.iaimi.openaisdk.common.BaseResData;
 import cn.iaimi.openaisdk.common.ErrorCode;
 import cn.iaimi.openaisdk.exception.BusinessException;
 import cn.iaimi.openaisdk.manager.MsgManager;
@@ -9,6 +10,7 @@ import cn.iaimi.openaisdk.model.enums.ModelType;
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
+import com.alibaba.dashscope.aigc.generation.GenerationUsage;
 import com.alibaba.dashscope.aigc.generation.models.QwenParam;
 import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.Role;
@@ -89,16 +91,16 @@ public class ChatClientImpl implements ChatClient {
     }
 
     @Override
-    public Message chat(String message) {
+    public BaseResData<Message, GenerationUsage> chat(String message) {
         return doChat(message, null, false);
     }
 
     @Override
-    public Message chatPresets(String message, String systemSets) {
+    public BaseResData<Message, GenerationUsage> chatPresets(String message, String systemSets) {
         return doChat(message, systemSets, false);
     }
 
-    public Message doChat(String message, String systemSets, boolean isHistory) {
+    public BaseResData<Message, GenerationUsage> doChat(String message, String systemSets, boolean isHistory) {
         if (null != systemSets) {
             Message systemMsg =
                     Message.builder().role(Role.SYSTEM.getValue()).content(systemSets).build();
@@ -118,7 +120,9 @@ public class ChatClientImpl implements ChatClient {
         try {
             GenerationResult result = gen.call(param);
             msgManager.add(result); // 保存回复
-            return msgManager.getMsgByRes(result);
+            Message msgByRes = msgManager.getMsgByRes(result);
+
+            return new BaseResData<>(msgByRes, result.getUsage());
         } catch (NoApiKeyException e) {
             throw new BusinessException(ErrorCode.NO_API_KEY, e.getMessage());
         } catch (InputRequiredException e) {

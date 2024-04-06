@@ -2,6 +2,7 @@ package cn.iaimi.openaisdk.aisender.openai.impl;
 
 import cn.iaimi.openaisdk.aisender.openai.Sender;
 import cn.iaimi.openaisdk.api.OpenAiApi;
+import cn.iaimi.openaisdk.common.BaseResData;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
 import cn.iaimi.openaisdk.exception.BusinessException;
@@ -31,7 +32,7 @@ public class SenderImpl implements Sender {
     private OpenAiApi openAiApi;
 
     @Override
-    public Message chat(String message) {
+    public BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat(String message) {
         CreateChatCompletionRequest request = new CreateChatCompletionRequest();
         request.setMessages(Arrays.asList(new Message("user", message)));
 
@@ -43,12 +44,13 @@ public class SenderImpl implements Sender {
         }
 
         CreateChatCompletionResponse completionData = chatCompletion.getData();
-
-        return completionData.getChoices().get(0).getMessage();
+        CreateChatCompletionResponse.ChoicesBean.MessageBean messageBean = completionData.getChoices().get(0).getMessage();
+        CreateChatCompletionResponse.UsageBean usageBean = completionData.getUsage();
+        return new BaseResData<>(messageBean, usageBean);
     }
 
     @Override
-    public Message chatPresets(String message, String systemSets) {
+    public BaseResData<Message, CreateChatCompletionResponse.UsageBean> chatPresets(String message, String systemSets) {
         List<Message> messageList = new ArrayList<>();
         messageList.add(new Message("system", systemSets));
         messageList.add(new Message("user", message));
@@ -64,6 +66,8 @@ public class SenderImpl implements Sender {
         }
 
         CreateChatCompletionResponse completionData = chatCompletion.getData();
-        return completionData.getChoices().get(0).getMessage();
+        CreateChatCompletionResponse.ChoicesBean.MessageBean messageBean = completionData.getChoices().get(0).getMessage();
+        CreateChatCompletionResponse.UsageBean usageBean = completionData.getUsage();
+        return new BaseResData<>(messageBean, usageBean);
     }
 }

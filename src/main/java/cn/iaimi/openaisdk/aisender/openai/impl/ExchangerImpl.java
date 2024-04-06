@@ -2,6 +2,7 @@ package cn.iaimi.openaisdk.aisender.openai.impl;
 
 import cn.iaimi.openaisdk.aisender.openai.Exchanger;
 import cn.iaimi.openaisdk.api.OpenAiApi;
+import cn.iaimi.openaisdk.common.BaseResData;
 import cn.iaimi.openaisdk.common.BaseResponse;
 import cn.iaimi.openaisdk.common.ErrorCode;
 import cn.iaimi.openaisdk.exception.BusinessException;
@@ -54,7 +55,7 @@ public class ExchangerImpl implements Exchanger {
     }
 
     @Override
-    public Message chat(String message) {
+    public BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat(String message) {
 
         if (preSetMsg != null) { // 假如存在预设消息，拼入消息开头
             msgDeque.addFirst(preSetMsg);
@@ -83,7 +84,8 @@ public class ExchangerImpl implements Exchanger {
             removeFirstMsgs(2);
         }
 
-        return replyMsg;
+
+        return new BaseResData<>(replyMsg, response.getData().getUsage());
     }
 
     @Override
