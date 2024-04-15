@@ -13,10 +13,7 @@ import cn.iaimi.openaisdk.model.dto.ai.Message;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author clov614
@@ -92,6 +89,12 @@ public class ExchangerImpl implements Exchanger {
     public List<Message> getMsgs() {
 
         return new ArrayList<>(msgDeque);
+    }
+
+    @Override
+    public void setMsgs(List<Message> msgs) {
+        msgDeque = new ArrayDeque<>();
+        msgs.forEach((msg) -> msgDeque.offerLast(msg));
     }
 
     @Override

@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,8 +97,28 @@ public class ChatClientImpl implements ChatClient {
     }
 
     @Override
+    public BaseResData<List<Message>, GenerationUsage> chat(List<Message> messages) {
+        return doChat(messages);
+    }
+
+    @Override
     public BaseResData<Message, GenerationUsage> chatPresets(String message, String systemSets) {
         return doChat(message, systemSets, false);
+    }
+
+    @Override
+    public List<Message> addPresets(List<Message> messages, String systemSet) {
+        Message systemMsg =
+                Message.builder().role(Role.SYSTEM.getValue()).content(systemSet).build();
+        messages.add(systemMsg);
+        return messages;
+    }
+
+    @Override
+    public List<Message> addUser(List<Message> messages, String userMsg) {
+        Message msg = Message.builder().role(Role.USER.getValue()).content(userMsg).build();
+        messages.add(msg);
+        return messages;
     }
 
     public BaseResData<Message, GenerationUsage> doChat(String message, String systemSets, boolean isHistory) {
@@ -133,4 +154,28 @@ public class ChatClientImpl implements ChatClient {
             }
         }
     }
+
+    private BaseResData<List<Message>, GenerationUsage> doChat(List<Message> messages) {
+        // TODO 细化 参数
+        QwenParam param = QwenParam.builder()
+                .model(modelMap.getOrDefault(aliChatAiSdkConfig.getUseModel(), ModelType.QWEN_MAX).getValue())
+                .messages(messages)
+                .resultFormat(GenerationParam.ResultFormat.MESSAGE)
+                .topP(aliChatAiSdkConfig.getTopP()) // 取值越大，生成的随机性越高(0, 1.0)
+                .enableSearch(aliChatAiSdkConfig.getEnableSearch()) // 是否启用搜索？
+                .build();
+        try {
+            GenerationResult result = gen.call(param);
+            msgManager.add(result); // 保存回复
+            Message msgByRes = msgManager.getMsgByRes(result);
+            messages.add(msgByRes);
+            return new BaseResData<>(messages, result.getUsage());
+        } catch (NoApiKeyException e) {
+            throw new BusinessException(ErrorCode.NO_API_KEY, e.getMessage());
+        } catch (InputRequiredException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

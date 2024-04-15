@@ -27,6 +27,8 @@ public interface Exchanger {
      */
     List<Message> getMsgs();
 
+    void setMsgs(List<Message> msgs);
+
     /**
      * 获取最后一条回复
      * @return
