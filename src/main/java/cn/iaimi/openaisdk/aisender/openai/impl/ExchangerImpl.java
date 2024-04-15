@@ -146,6 +146,16 @@ public class ExchangerImpl implements Exchanger {
     }
 
     @Override
+    public void addFirstMsg(String msg) {
+        this.msgDeque.offerFirst(new Message("user", msg));
+    }
+
+    @Override
+    public void addLastMsg(String msg) {
+        this.msgDeque.offerLast(new Message("user", msg));
+    }
+
+    @Override
     public void clearPreSet() {
         this.preSetMsg = null;
     }

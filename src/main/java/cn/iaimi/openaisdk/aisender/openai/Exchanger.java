@@ -61,6 +61,11 @@ public interface Exchanger {
      */
     void setPreSetMsg(String preSetMsg);
 
+    void addFirstMsg(String msg);
+
+    void addLastMsg(String msg);
+
+
     /**
      * 清除 预设
      */
