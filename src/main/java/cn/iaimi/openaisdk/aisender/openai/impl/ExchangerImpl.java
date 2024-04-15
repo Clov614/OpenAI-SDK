@@ -70,12 +70,18 @@ public class ExchangerImpl implements Exchanger {
     }
 
     @Override
-    public BaseResData<List<Message>, CreateChatCompletionResponse.UsageBean> chat() {
+    public BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat() {
         BaseResponse<CreateChatCompletionResponse> response = doChat();
-        return new BaseResData<>(new ArrayList<>(msgDeque), response.getData().getUsage());
+        List<CreateChatCompletionResponse.ChoicesBean> choices = response.getData().getChoices();
+        CreateChatCompletionResponse.ChoicesBean.MessageBean replyMsg = choices.get(choices.size() - 1).getMessage();
+        Message message = new Message(replyMsg.getRole(), replyMsg.getContent());
+        return new BaseResData<>(message, response.getData().getUsage());
     }
 
     private BaseResponse<CreateChatCompletionResponse> doChat() {
+        if (msgDeque.size() == 0 ) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "消息列表为空");
+        }
         CreateChatCompletionRequest request = new CreateChatCompletionRequest();
         request.setMessages(new ArrayList<>(msgDeque));
         BaseResponse<CreateChatCompletionResponse> response = openAiApi.createChatCompletion(request, configInfo);
@@ -102,7 +108,7 @@ public class ExchangerImpl implements Exchanger {
 
     @Override
     public void setMsgs(List<Message> msgs) {
-        msgDeque = new ArrayDeque<>();
+        msgDeque = new ArrayDeque<>(msgs.size()); // tag 可能不需要分配具体空间
         msgs.forEach((msg) -> msgDeque.offerLast(msg));
     }
 

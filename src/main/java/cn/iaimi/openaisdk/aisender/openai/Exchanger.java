@@ -23,9 +23,10 @@ public interface Exchanger {
 
     /**
      * 直接发送对话
+     *
      * @return
      */
-    BaseResData<List<Message>, CreateChatCompletionResponse.UsageBean> chat();
+    BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat();
 
     /**
      * 获取所有对话历史
