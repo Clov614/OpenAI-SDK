@@ -59,6 +59,23 @@ public class ExchangerImpl implements Exchanger {
         }
         // 发送消息，并记录对话
         msgDeque.addLast(new Message("user", message));
+        BaseResponse<CreateChatCompletionResponse> response = doChat();
+        // 移除预设消息
+        if (preSetMsg != null) {
+            msgDeque.removeFirst();
+        }
+        List<CreateChatCompletionResponse.ChoicesBean> choices = response.getData().getChoices();
+        CreateChatCompletionResponse.ChoicesBean.MessageBean replyMsg = choices.get(choices.size() - 1).getMessage();
+        return new BaseResData<>(replyMsg, response.getData().getUsage());
+    }
+
+    @Override
+    public BaseResData<List<Message>, CreateChatCompletionResponse.UsageBean> chat() {
+        BaseResponse<CreateChatCompletionResponse> response = doChat();
+        return new BaseResData<>(new ArrayList<>(msgDeque), response.getData().getUsage());
+    }
+
+    private BaseResponse<CreateChatCompletionResponse> doChat() {
         CreateChatCompletionRequest request = new CreateChatCompletionRequest();
         request.setMessages(new ArrayList<>(msgDeque));
         BaseResponse<CreateChatCompletionResponse> response = openAiApi.createChatCompletion(request, configInfo);
@@ -66,23 +83,15 @@ public class ExchangerImpl implements Exchanger {
         if (response.getCode() != 0) {
             throw new BusinessException(ErrorCode.CHAT_ERROR, response.getMessage());
         }
-
         List<CreateChatCompletionResponse.ChoicesBean> choices = response.getData().getChoices();
 
-        Message replyMsg = choices.get(choices.size() - 1).getMessage();
         // 记录对话
-        msgDeque.addLast(replyMsg);
-        // 移除预设消息
-        if (preSetMsg != null) {
-            msgDeque.removeFirst();
-        }
+        msgDeque.addLast(choices.get(choices.size() - 1).getMessage());
         // 维护 消息队列的长度
         while (msgDeque.size() > maxMsgSize) {
             removeFirstMsgs(2);
         }
-
-
-        return new BaseResData<>(replyMsg, response.getData().getUsage());
+        return response;
     }
 
     @Override

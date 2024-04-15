@@ -22,6 +22,12 @@ public interface Exchanger {
     BaseResData<Message, CreateChatCompletionResponse.UsageBean> chat(String message);
 
     /**
+     * 直接发送对话
+     * @return
+     */
+    BaseResData<List<Message>, CreateChatCompletionResponse.UsageBean> chat();
+
+    /**
      * 获取所有对话历史
      * @return messageList
      */
